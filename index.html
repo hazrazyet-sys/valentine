@@ -21,135 +21,28 @@
       overflow: hidden;
     }
 
-    .container {
-      text-align: center;
-      z-index: 2;
-    }
-
-    h1 {
-      color: #b30059;
-      font-size: 2.5rem;
-      margin-bottom: 30px;
-    }
-
-    .buttons {
-      position: relative;
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-    }
-
-    button {
-      border: none;
-      padding: 15px 30px;
-      font-size: 1.2rem;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    #yesBtn {
-      background-color: #ff3366;
-      color: white;
-    }
-
-    #noBtn {
-      background-color: white;
-      color: #ff3366;
-      position: absolute;
-      right: -120px;
-    }
-
-    .heart {
+    /* ---------- LOADING SCREEN ---------- */
+    #loadingScreen {
       position: fixed;
-      bottom: -20px;
-      font-size: 24px;
-      animation: floatUp 5s linear forwards;
-      color: #ff3366;
-      pointer-events: none;
+      inset: 0;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
     }
 
-    @keyframes floatUp {
-      from {
-        transform: translateY(0);
-        opacity: 1;
-      }
-      to {
-        transform: translateY(-110vh);
-        opacity: 0;
-      }
+    #loadingText {
+      color: #b30059;
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      text-align: center;
+      max-width: 80%;
     }
-  </style>
-</head>
-<body>
 
-  <audio id="loveMusic" loop>
-    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9cde3d10b6.mp3" type="audio/mpeg">
-  </audio>
+    .barContainer {
+      width: 80%;
+      height: 20px;
+      background: #ffd6e0;
 
-  <div class="container" id="main">
-    <h1 id="mainText">Will you be my Valentine? 💝</h1>
-
-    <div class="buttons">
-      <button id="yesBtn">Yes</button>
-      <button id="noBtn">No</button>
-    </div>
-  </div>
-
-  <script>
-    const yesBtn = document.getElementById("yesBtn");
-    const noBtn = document.getElementById("noBtn");
-    const mainText = document.getElementById("mainText");
-    const music = document.getElementById("loveMusic");
-
-    let noCount = 0;
-
-    yesBtn.addEventListener("click", () => {
-      mainText.textContent = "Thank you baby! I love you so much 💖";
-      noBtn.style.display = "none";
-      yesBtn.style.display = "none";
-
-      music.play();
-
-      setInterval(createHeart, 250);
-    });
-
-    noBtn.addEventListener("click", () => {
-      noCount++;
-
-      // Move No button randomly
-      const x = Math.random() * (window.innerWidth - 100);
-      const y = Math.random() * (window.innerHeight - 100);
-      noBtn.style.left = x + "px";
-      noBtn.style.top = y + "px";
-
-      // Enlarge Yes button
-      let scale = 1 + noCount * 0.6;
-      yesBtn.style.transform = `scale(${scale})`;
-
-      if (noCount >= 3) {
-        yesBtn.style.position = "fixed";
-        yesBtn.style.top = "0";
-        yesBtn.style.left = "0";
-        yesBtn.style.width = "100vw";
-        yesBtn.style.height = "100vh";
-        yesBtn.style.borderRadius = "0";
-        yesBtn.style.fontSize = "3rem";
-        noBtn.style.display = "none";
-      }
-    });
-
-    function createHeart() {
-      const heart = document.createElement("div");
-      heart.classList.add("heart");
-      heart.textContent = "❤️";
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.fontSize = Math.random() * 20 + 20 + "px";
-      document.body.appendChild(heart);
-
-      setTimeout(() => heart.remove(), 5000);
-    }
-  </script>
-
-</body>
-</html>
