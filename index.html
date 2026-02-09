@@ -114,6 +114,25 @@
       from { transform: translateY(0); opacity: 1; }
       to { transform: translateY(-110vh); opacity: 0; }
     }
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      50% { transform: translateX(4px); }
+      75% { transform: translateX(-4px); }
+      100% { transform: translateX(0); }
+    }
+
+    .shake-weak {
+      animation: shake 0.3s infinite;
+    }
+
+    .shake-medium {
+      animation: shake 0.15s infinite;
+    }
+
+    .shake-strong {
+      animation: shake 0.08s infinite;
+    }
   </style>
 </head>
 <body>
@@ -141,41 +160,84 @@
 </div>
 
 <script>
-  /* ---------- LOADING LOGIC ---------- */
+window.onload = () => {
   const bar = document.getElementById("loadingBar");
   const loadingText = document.getElementById("loadingText");
   const loadingScreen = document.getElementById("loadingScreen");
   const main = document.getElementById("main");
 
-  let progress = 0;
-  const loadingInterval = setInterval(() => {
-    progress += 5;
-    bar.style.width = progress + "%";
-
-    if (progress >= 50) {
-      clearInterval(loadingInterval);
-
-      loadingText.textContent =
-        "I may be patient but I’m not the type to wait too long, so let’s speed it up 😌";
-
-      setTimeout(() => {
-        bar.style.transition = "width 0.15s ease";
-        bar.style.width = "100%";
-      }, 800);
-
-      setTimeout(() => {
-        loadingScreen.style.display = "none";
-        main.style.display = "block";
-      }, 1200);
-    }
-  }, 150);
-
-  /* ---------- MAIN INTERACTIONS ---------- */
   const yesBtn = document.getElementById("yesBtn");
   const noBtn = document.getElementById("noBtn");
   const mainText = document.getElementById("mainText");
   const music = document.getElementById("loveMusic");
 
+  loadingScreen.style.display = "flex";
+  main.style.display = "none";
+
+  let progress = 0;
+
+  /* ---------- PHASE 1: NORMAL LOAD (3s) ---------- */
+  const fastLoad = setInterval(() => {
+    progress += 2;
+    bar.style.width = progress + "%";
+
+    if (progress >= 60) {
+      clearInterval(fastLoad);
+      slowLoad();
+    }
+  }, 100);
+
+  /* ---------- PHASE 2: SLOW CRAWL ---------- */
+  function slowLoad() {
+    const slow = setInterval(() => {
+      progress += 1;
+      bar.style.width = progress + "%";
+
+      if (progress >= 70) {
+        clearInterval(slow);
+        pauseMoment();
+      }
+    }, 300);
+  }
+
+  /* ---------- PHASE 3: FULL STOP + TEXT ---------- */
+  function pauseMoment() {
+    loadingText.textContent =
+      "I may be patient but I’m not the type to wait too long, so let’s speed it up 😌";
+
+    setTimeout(startShake, 3000);
+  }
+
+  /* ---------- PHASE 4: SHAKE ESCALATION ---------- */
+  function startShake() {
+    bar.classList.add("shake-weak");
+
+    setTimeout(() => {
+      bar.classList.remove("shake-weak");
+      bar.classList.add("shake-medium");
+    }, 700);
+
+    setTimeout(() => {
+      bar.classList.remove("shake-medium");
+      bar.classList.add("shake-strong");
+    }, 1400);
+
+    setTimeout(() => {
+      bar.classList.remove("shake-strong");
+      bar.style.width = "100%";
+      finishLoading();
+    }, 2000);
+  }
+
+  /* ---------- PHASE 5: TRANSITION ---------- */
+  function finishLoading() {
+    setTimeout(() => {
+      loadingScreen.style.display = "none";
+      main.style.display = "block";
+    }, 300);
+  }
+
+  /* ---------- MAIN INTERACTIONS ---------- */
   let noCount = 0;
 
   yesBtn.addEventListener("click", () => {
@@ -189,18 +251,14 @@
   noBtn.addEventListener("click", () => {
     noCount++;
 
-    // Safe movement bounds
     const btnWidth = noBtn.offsetWidth;
     const btnHeight = noBtn.offsetHeight;
 
     const maxX = window.innerWidth - btnWidth - 10;
     const maxY = window.innerHeight - btnHeight - 10;
 
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
-
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
+    noBtn.style.left = Math.random() * maxX + "px";
+    noBtn.style.top = Math.random() * maxY + "px";
 
     yesBtn.style.transform = `scale(${1 + noCount * 0.6})`;
 
@@ -224,7 +282,9 @@
     document.body.appendChild(heart);
     setTimeout(() => heart.remove(), 5000);
   }
+};
 </script>
+
 
 </body>
 </html>
