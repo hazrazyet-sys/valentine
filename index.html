@@ -167,55 +167,7 @@
         opacity: 0.9;
       }
     }
-    /* ---------- BACKGROUND ANIMATION ---------- */
-    body {
-      animation: bgBreath 20s ease-in-out infinite alternate;
-    }
-    
-    @keyframes bgBreath {
-      0% {
-        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      }
-      100% {
-        background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
-      }
-    }
-    
-    /* ---------- VIGNETTE ---------- */
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.15);
-      z-index: 1;
-    }
-
-    /* ---------- FADE-IN LOVE MESSAGE ---------- */
-    .love-message > div {
-      opacity: 0;
-      animation: fadeUp 1s ease forwards;
-    }
-    
-    .love-message .thank-you {
-      animation-delay: 0.2s;
-    }
-
-    .love-message .love-you {
-      animation-delay: 0.6s;
-    }
-
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
+  
   </style>
 </head>
 <body>
@@ -324,19 +276,11 @@ window.onload = () => {
   let noCount = 0;
 
   yesBtn.addEventListener("click", () => {
-    main.innerHTML = `
-      <div class="love-message">
-        <div class="thank-you">Thank you baby! 💖</div>
-        <div class="love-you">I love you so much</div>
-      </div>
-    `;
-  
+    mainText.textContent = "Thank you baby! I love you so much 💖";
+    yesBtn.style.display = "none";
+    noBtn.style.display = "none";
     music.play();
-    burstHearts();
-  
-    setTimeout(() => {
-      setInterval(createHeart, 300);
-    }, 1200);
+    setInterval(createHeart, 250);
   });
 
 
@@ -366,20 +310,6 @@ window.onload = () => {
   });
 
   function createHeart() {
-    function burstHearts() {
-      for (let i = 0; i < 30; i++) {
-        const heart = document.createElement("div");
-        heart.className = "heart";
-        heart.textContent = "❤️";
-        heart.style.left = "50vw";
-        heart.style.bottom = "50vh";
-        heart.style.fontSize = Math.random() * 20 + 20 + "px";
-        heart.style.transform = `translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px)`;
-        document.body.appendChild(heart);
-    
-        setTimeout(() => heart.remove(), 3000);
-      }
-    }
     const heart = document.createElement("div");
     heart.className = "heart";
     heart.textContent = "❤️";
