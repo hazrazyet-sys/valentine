@@ -4,11 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Be My Valentine 💘</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&display=swap" rel="stylesheet">
 
   <style>
     * {
       box-sizing: border-box;
-      font-family: "Comic Sans MS", cursive, sans-serif;
+      font-family: "Playfair Display", serif;
     }
 
     body {
@@ -67,6 +68,24 @@
       color: #b30059;
       font-size: 2.5rem;
       margin-bottom: 30px;
+    }
+    .love-message {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .thank-you {
+      font-size: 2.4rem;
+      font-weight: 600;
+      color: #b30059;
+    }
+
+    .love-you {
+      font-size: 3.2rem;
+      font-weight: 900;
+      color: #ff1f5a;
     }
 
     .buttons {
@@ -241,7 +260,12 @@ window.onload = () => {
   let noCount = 0;
 
   yesBtn.addEventListener("click", () => {
-    mainText.textContent = "Thank you baby! I love you so much 💖";
+    main.innerHTML = `
+      <div class="love-message">
+        <div class="thank-you">Thank you baby! 💖</div>
+        <div class="love-you">I love you so much</div>
+      </div>
+    `;
     yesBtn.style.display = "none";
     noBtn.style.display = "none";
     music.play();
