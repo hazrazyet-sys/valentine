@@ -43,18 +43,38 @@ html, body {
 /* FLOWERS */
 .flower {
   position: absolute;
-  width: 120px;
+  width: 140px;
+  height: 140px;
+  background:
+    radial-gradient(circle at 30% 30%, #a259ff 20%, transparent 21%),
+    radial-gradient(circle at 70% 30%, #4da6ff 20%, transparent 21%),
+    radial-gradient(circle at 30% 70%, #ff9ad5 20%, transparent 21%),
+    radial-gradient(circle at 70% 70%, #ffd1e8 20%, transparent 21%);
+  border-radius: 50%;
   opacity: 0;
-  animation: flowerIn 6s ease forwards;
+  z-index: 2;
 }
 
-.flower.left { left: -140px; }
-.flower.right { right: -140px; }
+.flower.left {
+  left: -160px;
+  animation: flowerLeft 6s ease forwards;
+}
 
-@keyframes flowerIn {
+.flower.right {
+  right: -160px;
+  animation: flowerRight 6s ease forwards;
+}
+
+@keyframes flowerLeft {
   0% { opacity: 0; transform: translateX(0); }
-  50% { opacity: 1; }
-  100% { opacity: 1; transform: translateX(180px); }
+  60% { opacity: 1; }
+  100% { opacity: 1; transform: translateX(200px); }
+}
+
+@keyframes flowerRight {
+  0% { opacity: 0; transform: translateX(0); }
+  60% { opacity: 1; }
+  100% { opacity: 1; transform: translateX(-200px); }
 }
 
 /* ===== TEXT ZOOM ===== */
@@ -107,6 +127,8 @@ button {
   background: black;
   opacity: 0;
   z-index: 10;
+  pointer-events: none;
+  transition: opacity 2s ease;
 }
 
 /* ===== FINAL SCREEN ===== */
@@ -138,8 +160,8 @@ canvas {
 
 <!-- INTRO -->
 <div id="intro" class="screen">
-  <img class="flower left" src="https://i.imgur.com/jQ9Z1Zm.png">
-  <img class="flower right" src="https://i.imgur.com/0v5n7gU.png">
+  <div class="flower left"></div>
+  <div class="flower right"></div>
 
   <div id="question">
     Will you allow me the greatest joy of spending this Valentine’s Day with you?
@@ -192,6 +214,7 @@ let yesInterval = setInterval(() => {
 function startFinal() {
   clearInterval(yesInterval);
 
+  black.style.pointerEvents = "auto";
   black.style.opacity = 1;
 
   setTimeout(() => {
@@ -205,6 +228,7 @@ function startFinal() {
     }, 20000);
   }, 2000);
 }
+
 
 /* FIREWORKS (simple canvas effect) */
 function startFireworks() {
