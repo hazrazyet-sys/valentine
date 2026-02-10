@@ -1,270 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Be My Valentine 💘</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>For Mika 💖</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: "Playfair Display", serif;
-    }
+<style>
+:root {
+  --pink: #f7c6d9;
+  --dark-pink: #b30059;
+  --gold: #e6c15a;
+}
 
-    body {
-      margin: 0;
-      height: 100vh;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
+* {
+  box-sizing: border-box;
+  font-family: "Georgia", serif;
+}
 
-    /* ---------- LOADING SCREEN ---------- */
-    #loadingScreen {
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 10;
-    }
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: white;
+}
 
-    #loadingText {
-      color: #b30059;
-      font-size: 1.4rem;
-      margin-bottom: 20px;
-      text-align: center;
-      max-width: 80%;
-    }
+/* ===== SCREEN WRAPPER ===== */
+.screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 2s ease;
+}
 
-    .barContainer {
-      width: 80%;
-      height: 20px;
-      background: #ffd6e0;
-      border-radius: 10px;
-      overflow: hidden;
-    }
+/* ===== INTRO SCREEN ===== */
+#intro {
+  background: var(--pink);
+  opacity: 0;
+}
 
-    .bar {
-      height: 100%;
-      width: 0%;
-      background: #ff3366;
-      transition: width 0.4s ease;
-    }
+/* FLOWERS */
+.flower {
+  position: absolute;
+  width: 120px;
+  opacity: 0;
+  animation: flowerIn 6s ease forwards;
+}
 
-    /* ---------- MAIN CONTENT ---------- */
-    .container {
-      text-align: center;
-      z-index: 2;
-      display: none;
-    }
+.flower.left { left: -140px; }
+.flower.right { right: -140px; }
 
-    h1 {
-      color: #b30059;
-      font-size: 2.5rem;
-      margin-bottom: 30px;
-    }
-    .love-message {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
+@keyframes flowerIn {
+  0% { opacity: 0; transform: translateX(0); }
+  50% { opacity: 1; }
+  100% { opacity: 1; transform: translateX(180px); }
+}
 
-    .thank-you {
-      font-size: 2.4rem;
-      font-weight: 600;
-      color: #b30059;
-    }
+/* ===== TEXT ZOOM ===== */
+#question {
+  text-align: center;
+  color: var(--dark-pink);
+  font-size: clamp(1.2rem, 5vw, 2.5rem);
+  max-width: 90%;
+  transform: scale(0.05);
+  opacity: 0;
+  animation: zoomIn 6s ease forwards;
+  animation-delay: 4s;
+}
 
-    .love-you {
-      font-size: 3.2rem;
-      font-weight: 900;
-      color: #ff1f5a;
-      animation: gentlePulse 2.5s ease-in-out infinite;
-    }
+@keyframes zoomIn {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
 
-    .buttons {
-@@ -152,163 +153,177 @@
-    .shake-strong {
-      animation: shake 0.08s infinite;
-    }
-    @keyframes gentlePulse {
-      0% {
-        transform: scale(1);
-        opacity: 0.9;
-      }
-      50% {
-        transform: scale(1.05);
-        opacity: 1;
-      }
-      100% {
-        transform: scale(1);
-        opacity: 0.9;
-      }
-    }
-  </style>
+/* ===== YES BUTTONS ===== */
+#buttons {
+  position: absolute;
+  bottom: 15%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+button {
+  padding: 12px 26px;
+  font-size: 1.1rem;
+  background: linear-gradient(45deg, var(--gold), #fff0c2);
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+  animation: popIn 0.5s ease;
+}
+
+@keyframes popIn {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+/* ===== FADE TO BLACK ===== */
+#black {
+  background: black;
+  opacity: 0;
+  z-index: 10;
+}
+
+/* ===== FINAL SCREEN ===== */
+#final {
+  background: black;
+  color: white;
+  text-align: center;
+  flex-direction: column;
+  opacity: 0;
+  z-index: 20;
+}
+
+#finalText {
+  font-size: clamp(1.3rem, 4vw, 2.5rem);
+  max-width: 90%;
+  opacity: 0;
+  transition: opacity 2s ease;
+}
+
+/* ===== FIREWORKS ===== */
+canvas {
+  position: absolute;
+  inset: 0;
+}
+</style>
 </head>
+
 <body>
 
-<!-- LOADING SCREEN -->
-<div id="loadingScreen">
-  <div id="loadingText">Loading something important… 💖</div>
-  <div class="barContainer">
-    <div class="bar" id="loadingBar"></div>
+<!-- INTRO -->
+<div id="intro" class="screen">
+  <img class="flower left" src="https://i.imgur.com/jQ9Z1Zm.png">
+  <img class="flower right" src="https://i.imgur.com/0v5n7gU.png">
+
+  <div id="question">
+    Will you allow me the greatest joy of spending this Valentine’s Day with you?
   </div>
+
+  <div id="buttons"></div>
 </div>
 
-<audio id="loveMusic" loop>
-  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9cde3d10b6.mp3" type="audio/mpeg">
-</audio>
+<!-- BLACK -->
+<div id="black" class="screen"></div>
 
-<!-- MAIN CONTENT -->
-<div class="container" id="main">
-  <h1 id="mainText">Will you be my Valentine? 💝</h1>
-
-  <div class="buttons">
-    <button id="yesBtn">Yes</button>
-    <button id="noBtn">No</button>
+<!-- FINAL -->
+<div id="final" class="screen">
+  <canvas id="fireworks"></canvas>
+  <div id="finalText">
+    You have made me the happiest man, let’s celebrate our first valentines together baby!
   </div>
+
+  <!-- Pasilyo (interlude timestamp) -->
+  <iframe width="0" height="0"
+    src="https://www.youtube.com/embed/GOXGbr10i8s?start=83&autoplay=1"
+    allow="autoplay">
+  </iframe>
 </div>
+
+<!-- Krabby Patty Zoom Audio -->
+<audio id="zoomAudio" src="https://www.soundboard.com/mediafiles/ND/NDM3OTQ1NTc3NDM3Njg2_NDM3OTQ1NTc3NDM3Njg2.mp3"></audio>
 
 <script>
-window.onload = () => {
-  const bar = document.getElementById("loadingBar");
-  const loadingText = document.getElementById("loadingText");
-  const loadingScreen = document.getElementById("loadingScreen");
-  const main = document.getElementById("main");
+const intro = document.getElementById("intro");
+const buttons = document.getElementById("buttons");
+const black = document.getElementById("black");
+const final = document.getElementById("final");
+const finalText = document.getElementById("finalText");
+const zoomAudio = document.getElementById("zoomAudio");
 
-  const yesBtn = document.getElementById("yesBtn");
-  const noBtn = document.getElementById("noBtn");
-  const mainText = document.getElementById("mainText");
-  const music = document.getElementById("loveMusic");
+setTimeout(() => {
+  intro.style.opacity = 1;
+  zoomAudio.play();
+}, 500);
 
-  loadingScreen.style.display = "flex";
-  main.style.display = "none";
+// ADD YES BUTTONS
+let yesInterval = setInterval(() => {
+  const btn = document.createElement("button");
+  btn.textContent = "Yes";
+  btn.onclick = startFinal;
+  buttons.appendChild(btn);
+}, 3000);
 
-  let progress = 0;
+function startFinal() {
+  clearInterval(yesInterval);
 
-  /* ---------- PHASE 1: NORMAL LOAD (3s) ---------- */
-  const fastLoad = setInterval(() => {
-    progress += 2;
-    bar.style.width = progress + "%";
+  black.style.opacity = 1;
 
-    if (progress >= 60) {
-      clearInterval(fastLoad);
-      slowLoad();
+  setTimeout(() => {
+    final.style.opacity = 1;
+    finalText.style.opacity = 1;
+    startFireworks();
+
+    setTimeout(() => {
+      finalText.textContent =
+        "I love you Mika, always, beyond everything and anything, forevermore!";
+    }, 20000);
+  }, 2000);
+}
+
+/* FIREWORKS (simple canvas effect) */
+function startFireworks() {
+  const canvas = document.getElementById("fireworks");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  setInterval(() => {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height / 2;
+
+    for (let i = 0; i < 50; i++) {
+      ctx.beginPath();
+      ctx.arc(x + Math.random()*80-40, y + Math.random()*80-40, 2, 0, Math.PI*2);
+      ctx.fillStyle = `hsl(${Math.random()*360},100%,70%)`;
+      ctx.fill();
     }
-  }, 100);
-
-  /* ---------- PHASE 2: SLOW CRAWL ---------- */
-  function slowLoad() {
-    const slow = setInterval(() => {
-      progress += 1;
-      bar.style.width = progress + "%";
-
-      if (progress >= 70) {
-        clearInterval(slow);
-        pauseMoment();
-      }
-    }, 300);
-  }
-
-  /* ---------- PHASE 3: FULL STOP + TEXT ---------- */
-  function pauseMoment() {
-    loadingText.textContent =
-      "I may be patient but I’m not the type to wait too long, so let’s speed it up 😌";
-
-    setTimeout(startShake, 3000);
-  }
-
-  /* ---------- PHASE 4: SHAKE ESCALATION ---------- */
-  function startShake() {
-    bar.classList.add("shake-weak");
-
-    setTimeout(() => {
-      bar.classList.remove("shake-weak");
-      bar.classList.add("shake-medium");
-    }, 700);
-
-    setTimeout(() => {
-      bar.classList.remove("shake-medium");
-      bar.classList.add("shake-strong");
-    }, 1400);
-
-    setTimeout(() => {
-      bar.classList.remove("shake-strong");
-      bar.style.width = "100%";
-      finishLoading();
-    }, 2000);
-  }
-
-  /* ---------- PHASE 5: TRANSITION ---------- */
-  function finishLoading() {
-    setTimeout(() => {
-      loadingScreen.style.display = "none";
-      main.style.display = "block";
-    }, 300);
-  }
-
-  /* ---------- MAIN INTERACTIONS ---------- */
-  let noCount = 0;
-
-  yesBtn.addEventListener("click", () => {
-    main.innerHTML = `
-      <div class="love-message">
-        <div class="thank-you">Thank you baby! 💖</div>
-        <div class="love-you">I love you so much</div>
-      </div>
-    `;
-    yesBtn.style.display = "none";
-    noBtn.style.display = "none";
-    music.play();
-    setInterval(createHeart, 250);
-  });
-
-  noBtn.addEventListener("click", () => {
-    noCount++;
-
-    const btnWidth = noBtn.offsetWidth;
-    const btnHeight = noBtn.offsetHeight;
-
-    const maxX = window.innerWidth - btnWidth - 10;
-    const maxY = window.innerHeight - btnHeight - 10;
-
-    noBtn.style.left = Math.random() * maxX + "px";
-    noBtn.style.top = Math.random() * maxY + "px";
-
-    yesBtn.style.transform = `scale(${1 + noCount * 0.6})`;
-
-    if (noCount >= 3) {
-      yesBtn.style.position = "fixed";
-      yesBtn.style.inset = "0";
-      yesBtn.style.width = "100vw";
-      yesBtn.style.height = "100vh";
-      yesBtn.style.borderRadius = "0";
-      yesBtn.style.fontSize = "3rem";
-      noBtn.style.display = "none";
-    }
-  });
-
-  function createHeart() {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.textContent = "❤️";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.fontSize = Math.random() * 20 + 20 + "px";
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 5000);
-  }
-};
+  }, 5000);
+}
 </script>
-
 
 </body>
 </html>
